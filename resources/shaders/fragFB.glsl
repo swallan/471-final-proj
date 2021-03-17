@@ -16,10 +16,10 @@ uniform mat4 M1;
 in vec2 TexCoords;
 void main()
 {
-    color = texture(colorTexure, TexCoords.xy);
-    color.a = 1;
-    return;
-    
+//    color = texture(colorTexure, TexCoords.xy);
+//    color.a = 1;
+//    return;
+//    
     if (raysOn == 1.0){
         vec4 light_screen_position = P * V * M * vec4(0.0f,0.0f, 1.0f, 1.0f);
         light_screen_position.xy /= light_screen_position.w;

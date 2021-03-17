@@ -456,11 +456,11 @@ public:
 		glUniform1i(Tex2Location, 1);
 
         Tex1Location = glGetUniformLocation(heightshader->pid, "tex");//tex, tex2... sampler in the fragment shader
-        Tex2Location = glGetUniformLocation(heightshader->pid, "tex2");
+//        Tex2Location = glGetUniformLocation(heightshader->pid, "tex2");
         // Then bind the uniform samplers to texture units:
         glUseProgram(heightshader->pid);
         glUniform1i(Tex1Location, 0);
-        glUniform1i(Tex2Location, 1);
+//        glUniform1i(Tex2Location, 1);
 //
 //        Tex1Location = glGetUniformLocation(heightshader->pid, "tex");//tex, tex2... sampler in the fragment shader
 //        Tex2Location = glGetUniformLocation(heightshader->pid, "tex2");
@@ -562,7 +562,7 @@ public:
 		// Initialize the GLSL program.
 		prog = std::make_shared<Program>();
 		prog->setVerbose(true);
-		prog->setShaderNames(shaderDirectory + "/shader_vertex.glsl", resourceDirectory + "/shaders/shader_fragment.glsl");
+		prog->setShaderNames(shaderDirectory + "/shader_vertex.glsl", resourceDirectory + "/shaders/shader_fragment.glsl", "", "");
 		if (!prog->init())
 		{
 			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
@@ -581,7 +581,7 @@ public:
         
         heightshader = std::make_shared<Program>();
         heightshader->setVerbose(true);
-        heightshader->setShaderNames(shaderDirectory + "/height_vertex.glsl", resourceDirectory + "/shaders/height_frag.glsl");
+        heightshader->setShaderNames(shaderDirectory + "/height_vertex.glsl", resourceDirectory + "/shaders/height_frag.glsl",shaderDirectory+ "/tess_control.glsl",shaderDirectory+ "/tess_eval.glsl");
         if (!heightshader->init())
         {
             std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
@@ -618,7 +618,7 @@ public:
 
 		psky = std::make_shared<Program>();
 		psky->setVerbose(true);
-		psky->setShaderNames(shaderDirectory + "/skyvertex.glsl", shaderDirectory + "/skyfrag.glsl");
+		psky->setShaderNames(shaderDirectory + "/skyvertex.glsl", shaderDirectory + "/skyfrag.glsl", "", "");
 		if (!psky->init())
 		{
 			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
@@ -636,7 +636,7 @@ public:
         
         house_floor = std::make_shared<Program>();
         house_floor->setVerbose(true);
-        house_floor->setShaderNames(shaderDirectory + "/floor_vert.glsl", shaderDirectory + "/floor_frag.glsl");
+        house_floor->setShaderNames(shaderDirectory + "/floor_vert.glsl", shaderDirectory + "/floor_frag.glsl", "", "");
         if (!house_floor->init())
         {
             std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
@@ -659,7 +659,7 @@ public:
         
         house_wall = std::make_shared<Program>();
         house_wall->setVerbose(true);
-        house_wall->setShaderNames(shaderDirectory + "/wall_vert.glsl", shaderDirectory + "/wall_frag.glsl");
+        house_wall->setShaderNames(shaderDirectory + "/wall_vert.glsl", shaderDirectory + "/wall_frag.glsl", "", "");
         if (!house_wall->init())
         {
             std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
@@ -679,7 +679,7 @@ public:
         
         lightBulb = std::make_shared<Program>();
         lightBulb->setVerbose(true);
-        lightBulb->setShaderNames(shaderDirectory + "/lightBulb_vert.glsl", shaderDirectory + "/lightBulb_frag.glsl");
+        lightBulb->setShaderNames(shaderDirectory + "/lightBulb_vert.glsl", shaderDirectory + "/lightBulb_frag.glsl", "", "");
         if (!lightBulb->init())
         {
             std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
@@ -697,7 +697,7 @@ public:
         
         prog_framebuffer = make_shared<Program>();
         prog_framebuffer-> setVerbose(true);
-        prog_framebuffer->setShaderNames(shaderDirectory + "/vertFB.glsl", shaderDirectory + "/fragFB.glsl");
+        prog_framebuffer->setShaderNames(shaderDirectory + "/vertFB.glsl", shaderDirectory + "/fragFB.glsl", "", "");
         if (!prog_framebuffer->init()){
             std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
             exit(1);
@@ -745,6 +745,7 @@ public:
     
     
     void render(){
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
         int width, height;
         glfwGetFramebufferSize(windowManager->getHandle(), &width, &height);
         float aspect = width / (float)height;
@@ -852,7 +853,7 @@ public:
 		float dn = sin(ttime)*0.5 +0.5;
 		glUniform1f(psky->getUniform("dn"), dn);
 		glDisable(GL_DEPTH_TEST);
-		shape->draw(psky, false);
+//		shape->draw(psky, false);
         glEnable(GL_DEPTH_TEST);
 		psky->unbind();
         
@@ -902,18 +903,20 @@ public:
         offset.x = (int)offset.x;
         offset.z = (int)offset.z;
         glUniform3fv(heightshader->getUniform("camoff"), 1, &offset[0]);
+        
+        
         glBindVertexArray(VertexArrayID);
-
-
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBufferIDBox);
+        
+        
+//        glActiveTexture(GL_TEXTURE0);
+//        glBindTexture(GL_TEXTURE_2D, HeightTex);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, HeightTex);
-        glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, Texture);
         
-//        glPatchParameteri(GL_PATCH_VERTICES, 3);
+        glPatchParameteri(GL_PATCH_VERTICES, 3);
 
-        glDrawElements(GL_TRIANGLES, MESHSIZE * MESHSIZE * 6 , GL_UNSIGNED_SHORT, (void*)0);
+        glDrawElements(GL_PATCHES, MESHSIZE * MESHSIZE * 6 , GL_UNSIGNED_SHORT, (void*)0);
         heightshader->unbind();
         
 //        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
