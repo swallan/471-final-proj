@@ -18,7 +18,7 @@ uniform mat4 M1;
 in vec2 TexCoords;
 void main()
 {
-//    color = texture(colorTexure, TexCoords.xy);
+//    color = texture(BWTexure, TexCoords.xy);
 //    color.a = 1;
 //    return;
 //    
@@ -90,7 +90,7 @@ void main()
         color.a = 1;
     }
     vec3 result = texture(bloom,TexCoords, 0).rgb;
-    float weightArr[10] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216, 0.016216, 0.016216, 0.016216, 0.016216, 0.016216);
+    float weights[10] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216, 0.016216, 0.016216, 0.016216, 0.016216, 0.016216);
     vec2 tex_offset = 1.0 / textureSize(bloom, 0);
 //    vec3 overlight = vec3(0);
     
@@ -110,20 +110,22 @@ void main()
 //        }
 //    }
     
+    
+    // https://learnopengl.com/Advanced-Lighting/Bloom
     if(horizontal == 1)
      {
          for(int i = 1; i < 10; ++i)
          {
-             result += texture(bloom, fragTex + 1.2*vec2(tex_offset.x * i, 0.0)).rgb * weightArr[i];
-             result += texture(bloom, fragTex - 1.2*vec2(tex_offset.x * i, 0.0)).rgb * weightArr[i];
+             result += texture(bloom, fragTex + 1.2*vec2(tex_offset.x * i, 0.0)).rgb * weights[i];
+             result += texture(bloom, fragTex - 1.2*vec2(tex_offset.x * i, 0.0)).rgb * weights[i];
          }
      }
      else
      {
          for(int i = 1; i < 10; ++i)
          {
-             result += texture(bloom, fragTex + 1.2*vec2(0.0, tex_offset.y * i)).rgb * weightArr[i];
-             result += texture(bloom, fragTex - 1.2*vec2(0.0, tex_offset.y * i)).rgb * weightArr[i];
+             result += texture(bloom, fragTex + 1.2*vec2(0.0, tex_offset.y * i)).rgb * weights[i];
+             result += texture(bloom, fragTex - 1.2*vec2(0.0, tex_offset.y * i)).rgb * weights[i];
          }
      }
      vec4 blur = vec4(result, 1.0);

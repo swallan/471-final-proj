@@ -9,7 +9,6 @@ out vec3 vertex_normal;
 out vec3 vertex_pos;
 uniform sampler2D tex;
 
-
 uniform vec3 camoff;
 out vec2 frag_tex;
 
@@ -40,25 +39,6 @@ float noise(vec3 position, int octaves, float frequency, float persistence) {
     }
 
 
-vec3 calculateNormal(vec3 p1) {
-    float delta = 0.5f;
-
-    vec3 p2 = (p1 + vec3(delta, 0.0f, 0.0f)) * vec3(1.0f, 0.0f, 1.0f);
-    vec3 p3 = (p1 + vec3(0.0f, 0.0f, -delta)) * vec3(1.0f, 0.0f, 1.0f);
-
-    p2.y = (p2.y);
-    p3.y = (p3.y);
-
-    vec3 u = p2 - p1;
-    vec3 v = p3 - p1;
-
-    vec3 normal = vec3(0.0f);
-    normal.x = (u.y * v.z) - (u.z * v.y);
-    normal.y = (u.z * v.x) - (u.x * v.z);
-    normal.z = (u.x * v.y) - (u.y * v.x);
-
-    return normalize(normal);
-}
 
 
 void main()
@@ -90,9 +70,6 @@ void main()
     vec3 n = - normalize(cross(a -b , a -c ));
     vertex_normal = n;
     
-//    vertex_normal = calculateNormal(pos.xyz);
-    
-    
     float height = noise(pos.xzy, 11, 0.03, 0.6);
     float baseheight = noise(pos.xzy, 4, 0.04, 0.3);
     baseheight = pow(baseheight, 5)*3;
@@ -104,8 +81,9 @@ void main()
     vertex_pos = pos.xyz;
     frag_tex = Tex;
     gl_Position = P * V * pos;
-//
-//    vec3 texturecolor = texture(tex, pos.xy).rgb;
-//    frag_tex = texturecolor;
 
+    
+    
+    
+    
 }

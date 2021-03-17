@@ -43,7 +43,7 @@ void main()
     
     float heightOffset = (clamp(vertex_pos.y, 0, .5));
     
-    color.rgb = color.rgb + vec3(1.0f)*heightOffset;
+    color.rgb = color.rgb + vec3(.6f)*heightOffset;
     
     colorBW = vec4(0, 0, 0, 1);
 }

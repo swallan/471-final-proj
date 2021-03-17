@@ -123,6 +123,8 @@ public:
 	GLuint Texture, TextureN, HeightTex;
 	GLuint Texture2, floorTexture, wallTexture, cloudTex;
     
+    
+    //https://learnopengl.com/Advanced-Lighting/Bloom
     GLuint pingpongFBO[2];
     GLuint pingpongBuffer[2];
 
@@ -792,11 +794,11 @@ public:
         glBindTexture(GL_TEXTURE_2D, FBObloom);
         
         
-        int horizontal = 1, first_iteration = true;
-          int amount = 100;
+        int horizontal =true, first_iteration = true;
+          int amount = 1000;
           for (unsigned int i = 0; i < amount; i++)
           {
-
+              // set in the shader which one it is
               glUniform1i(prog_framebuffer->getUniform("horizontal"), horizontal);
 
               glActiveTexture(GL_TEXTURE2);
@@ -805,17 +807,12 @@ public:
               glBindVertexArray(VertexArrayIDRect);
               glDrawArrays(GL_TRIANGLES, 0,6);
 
-              if (horizontal == 1) horizontal = 0;
+              horizontal = !horizontal;
 
-              if (horizontal == 0) horizontal = 1;
 
               if (first_iteration)
                   first_iteration = false;
           }
-        
-        
-//        glBindVertexArray(VertexArrayIDRect);
-//        glDrawArrays(GL_TRIANGLES, 0,6);
   
         prog_framebuffer->unbind();
         
@@ -1032,17 +1029,7 @@ public:
         glUniform1f(lightBulb->getUniform("isSUN"),0.0f);
         glUniform3fv(lightBulb->getUniform("campos"), 1, &mycam.pos[0]);
         glUniform1f(lightBulb->getUniform("isBW"),0.0f);
-//        for (int i = -5; i<5; i++){
-//            for (int j = -5; j<5; j++){
-//                vec3 bPos = vec3(i*30,8,j*30); // MIN: vec3(-135, 22, -135) MAX: vec3(135, 22, 135)
-//                T = glm::translate(mat4(1), bPos);
-//                S = glm::scale(mat4(1), vec3(0.9,0.9,0.9));
-//                M = T * S;
-//                glUniformMatrix4fv(lightBulb->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-//                shape->draw(lightBulb, false);
-//
-//            }
-//        }
+
         
         shape->draw(lightBulb, false);
         
