@@ -5,6 +5,8 @@ uniform sampler2D colorTexure;
 uniform sampler2D BWTexure;
 uniform sampler2D bloom;
 uniform float raysOn;
+uniform int horizontal;
+
 uniform mat4 P;
 uniform mat4 V;
 uniform mat4 M;
@@ -87,25 +89,46 @@ void main()
         color.rgb = texture(colorTexure, fragTex ).rgb;
         color.a = 1;
     }
-    vec3 bloomColor = texture(bloom,TexCoords, 0).rgb;
-    vec3 overlight = vec3(0);
+    vec3 result = texture(bloom,TexCoords, 0).rgb;
+    float weightArr[10] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216, 0.016216, 0.016216, 0.016216, 0.016216, 0.016216);
+    vec2 tex_offset = 1.0 / textureSize(bloom, 0);
+//    vec3 overlight = vec3(0);
     
-    for (int y=-3 ; y<=3; y++){
-        for (int x=-3 ; x<=3; x++){
-            float f;
-            float l = length(vec2(x, y));
-            
-            l/=4.24;
-            l =1.0 -l;
-            vec2 textcoords = fragTex + vec2(x,y)*.2;
-            vec3 textureColorLOWRES = texture(bloom, TexCoords,0).rgb;
-            
-            overlight.r += pow(textureColorLOWRES.r, 3)*l;
-            overlight.g += pow(textureColorLOWRES.g, 3)*l;
-            overlight.b += pow(textureColorLOWRES.b, 3)*l;
-        }
-    }
-    color.rgb = color.rgb + overlight.rgb;
+//    for (int y=-3 ; y<=3; y++){
+//        for (int x=-3 ; x<=3; x++){
+//            float f;
+//            float l = length(vec2(x, y));
+//
+//            l/=4.24;
+//            l =1.0 -l;
+//            vec2 textcoords = fragTex + vec2(x,y)*.2;
+//            vec3 textureColorLOWRES = texture(bloom, TexCoords,0).rgb;
+//
+//            overlight.r += pow(textureColorLOWRES.r, 3)*l;
+//            overlight.g += pow(textureColorLOWRES.g, 3)*l;
+//            overlight.b += pow(textureColorLOWRES.b, 3)*l;
+//        }
+//    }
+    
+    if(horizontal == 1)
+     {
+         for(int i = 1; i < 10; ++i)
+         {
+             result += texture(bloom, fragTex + 1.2*vec2(tex_offset.x * i, 0.0)).rgb * weightArr[i];
+             result += texture(bloom, fragTex - 1.2*vec2(tex_offset.x * i, 0.0)).rgb * weightArr[i];
+         }
+     }
+     else
+     {
+         for(int i = 1; i < 10; ++i)
+         {
+             result += texture(bloom, fragTex + 1.2*vec2(0.0, tex_offset.y * i)).rgb * weightArr[i];
+             result += texture(bloom, fragTex - 1.2*vec2(0.0, tex_offset.y * i)).rgb * weightArr[i];
+         }
+     }
+     vec4 blur = vec4(result, 1.0);
+
+    color.rgb = color.rgb + blur.rgb;
     
     
     

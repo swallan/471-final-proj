@@ -33,7 +33,7 @@ void main()
     vec4 tcol = texture(tex, vertex_tex*10.);
     color = tcol;
     color.rgb *= d;
-    color.rgb += vec3(.2, .2, .2) *s;
+    color.rgb += vec3(.2, .2, 0) *s;
     
     
     colorBW = vec4(0, 0, 0, 1);

@@ -40,6 +40,25 @@ float noise(vec3 position, int octaves, float frequency, float persistence) {
     }
 
 
+vec3 calculateNormal(vec3 p1) {
+    float delta = 0.5f;
+
+    vec3 p2 = (p1 + vec3(delta, 0.0f, 0.0f)) * vec3(1.0f, 0.0f, 1.0f);
+    vec3 p3 = (p1 + vec3(0.0f, 0.0f, -delta)) * vec3(1.0f, 0.0f, 1.0f);
+
+    p2.y = (p2.y);
+    p3.y = (p3.y);
+
+    vec3 u = p2 - p1;
+    vec3 v = p3 - p1;
+
+    vec3 normal = vec3(0.0f);
+    normal.x = (u.y * v.z) - (u.z * v.y);
+    normal.y = (u.z * v.x) - (u.x * v.z);
+    normal.z = (u.x * v.y) - (u.y * v.x);
+
+    return normalize(normal);
+}
 
 
 void main()
@@ -57,8 +76,8 @@ void main()
     vec2 textcoords=pos.xz;
     float t = 1.0/100;
     textcoords -= vec2(camoff.x, camoff.z)*t;
-    
-    
+
+
     float g = .01;
     float h = vec3(texture(tex, textcoords/divisor)).r;
     float h1 = vec3(texture(tex, textcoords/divisor + vec2(0.0, g))).r;
@@ -67,9 +86,11 @@ void main()
     a = vec3(0, h * 2, 0);
     b = vec3(1, h1 * 2, 0);
     c = vec3(0, h2 * 2, 1);
-    
+
     vec3 n = - normalize(cross(a -b , a -c ));
     vertex_normal = n;
+    
+//    vertex_normal = calculateNormal(pos.xyz);
     
     
     float height = noise(pos.xzy, 11, 0.03, 0.6);

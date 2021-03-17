@@ -122,6 +122,9 @@ public:
 	//texture data
 	GLuint Texture, TextureN, HeightTex;
 	GLuint Texture2, floorTexture, wallTexture, cloudTex;
+    
+    GLuint pingpongFBO[2];
+    GLuint pingpongBuffer[2];
 
 	void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 	{
@@ -715,6 +718,7 @@ public:
         prog_framebuffer->addUniform("V1");
         prog_framebuffer->addUniform("M1");
         prog_framebuffer->addUniform("raysOn");
+        prog_framebuffer->addUniform("horizontal");
         
 	}
 
@@ -787,8 +791,31 @@ public:
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, FBObloom);
         
-        glBindVertexArray(VertexArrayIDRect);
-        glDrawArrays(GL_TRIANGLES, 0,6);
+        
+        int horizontal = 1, first_iteration = true;
+          int amount = 100;
+          for (unsigned int i = 0; i < amount; i++)
+          {
+
+              glUniform1i(prog_framebuffer->getUniform("horizontal"), horizontal);
+
+              glActiveTexture(GL_TEXTURE2);
+              glBindTexture(GL_TEXTURE_2D, first_iteration ? FBObloom : pingpongBuffer[horizontal]);
+
+              glBindVertexArray(VertexArrayIDRect);
+              glDrawArrays(GL_TRIANGLES, 0,6);
+
+              if (horizontal == 1) horizontal = 0;
+
+              if (horizontal == 0) horizontal = 1;
+
+              if (first_iteration)
+                  first_iteration = false;
+          }
+        
+        
+//        glBindVertexArray(VertexArrayIDRect);
+//        glDrawArrays(GL_TRIANGLES, 0,6);
   
         prog_framebuffer->unbind();
         
@@ -853,7 +880,7 @@ public:
 		float dn = sin(ttime)*0.5 +0.5;
 		glUniform1f(psky->getUniform("dn"), dn);
 		glDisable(GL_DEPTH_TEST);
-//		shape->draw(psky, false);
+		shape->draw(psky, false);
         glEnable(GL_DEPTH_TEST);
 		psky->unbind();
         
@@ -1005,6 +1032,18 @@ public:
         glUniform1f(lightBulb->getUniform("isSUN"),0.0f);
         glUniform3fv(lightBulb->getUniform("campos"), 1, &mycam.pos[0]);
         glUniform1f(lightBulb->getUniform("isBW"),0.0f);
+//        for (int i = -5; i<5; i++){
+//            for (int j = -5; j<5; j++){
+//                vec3 bPos = vec3(i*30,8,j*30); // MIN: vec3(-135, 22, -135) MAX: vec3(135, 22, 135)
+//                T = glm::translate(mat4(1), bPos);
+//                S = glm::scale(mat4(1), vec3(0.9,0.9,0.9));
+//                M = T * S;
+//                glUniformMatrix4fv(lightBulb->getUniform("M"), 1, GL_FALSE, &M[0][0]);
+//                shape->draw(lightBulb, false);
+//
+//            }
+//        }
+        
         shape->draw(lightBulb, false);
         
         lightBulb->unbind();
