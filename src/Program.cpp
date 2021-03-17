@@ -9,16 +9,16 @@
 
 std::string readFileAsString(const std::string &fileName)
 {
-	std::string result;
-	std::ifstream fileHandle(fileName);
+    std::string result;
+    std::ifstream fileHandle(fileName);
 
-	fileHandle.seekg(0, std::ios::end);
-	result.reserve((size_t) fileHandle.tellg());
-	fileHandle.seekg(0, std::ios::beg);
+    fileHandle.seekg(0, std::ios::end);
+    result.reserve((size_t) fileHandle.tellg());
+    fileHandle.seekg(0, std::ios::beg);
 
-	result.assign((std::istreambuf_iterator<char>(fileHandle)), std::istreambuf_iterator<char>());
+    result.assign((std::istreambuf_iterator<char>(fileHandle)), std::istreambuf_iterator<char>());
 
-	return result;
+    return result;
 }
 
 void Program::setShaderNames(const std::string &v, const std::string &f, const std::string &tc, const std::string &te)
@@ -31,153 +31,165 @@ void Program::setShaderNames(const std::string &v, const std::string &f, const s
 
 bool Program::init()
 {
-	GLint rc;
+    GLint rc;
 
-	// Create shader handles
-	GLuint VS = glCreateShader(GL_VERTEX_SHADER);
-	GLuint FS = glCreateShader(GL_FRAGMENT_SHADER);
-    
-    
+    // Create shader handles
+    GLuint VS = glCreateShader(GL_VERTEX_SHADER);
+    GLuint FS = glCreateShader(GL_FRAGMENT_SHADER);
+
     GLuint TC = glCreateShader(GL_TESS_CONTROL_SHADER);
     GLuint TE = glCreateShader(GL_TESS_EVALUATION_SHADER);
 
 
-	// Read shader sources
-	std::string vShaderString = readFileAsString(vShaderName);
-	std::string fShaderString = readFileAsString(fShaderName);
-	const char *vshader = vShaderString.c_str();
-	const char *fshader = fShaderString.c_str();
-	CHECKED_GL_CALL(glShaderSource(VS, 1, &vshader, NULL));
-	CHECKED_GL_CALL(glShaderSource(FS, 1, &fshader, NULL));
-    
-    
-    std::string teShaderString = readFileAsString(teShaderName);
-    std::string tcShaderString = readFileAsString(tcShaderName);
-    const char *teshader = teShaderString.c_str();
-    const char *tcshader = tcShaderString.c_str();
-    
-    CHECKED_GL_CALL(glShaderSource(TE, 1, &teshader, NULL));
-    CHECKED_GL_CALL(glShaderSource(TC, 1, &tcshader, NULL));
 
-	// Compile vertex shader
-	CHECKED_GL_CALL(glCompileShader(VS));
-	CHECKED_GL_CALL(glGetShaderiv(VS, GL_COMPILE_STATUS, &rc));
-	if (!rc)
-	{
-		if (isVerbose())
-		{
-			GLSL::printShaderInfoLog(VS);
-			std::cout << "Error compiling vertex shader " << vShaderName << std::endl;
-		}
-		return false;
-	}
+    // Read shader sources
+    std::string vShaderString = readFileAsString(vShaderName);
+    std::string fShaderString = readFileAsString(fShaderName);
+    const char *vshader = vShaderString.c_str();
+    const char *fshader = fShaderString.c_str();
+    CHECKED_GL_CALL(glShaderSource(VS, 1, &vshader, NULL));
+    CHECKED_GL_CALL(glShaderSource(FS, 1, &fshader, NULL));
+    const char* teshader = NULL;
+    const char* tcshader = NULL;
+    if (teShaderName.size() > 1)
+        {
+        std::string teShaderString = readFileAsString(teShaderName);
+        teshader = teShaderString.c_str();
+        CHECKED_GL_CALL(glShaderSource(TE, 1, &teshader, NULL));
+        }
 
-    
-    // Compile TE
-    CHECKED_GL_CALL(glCompileShader(TE));
-    CHECKED_GL_CALL(glGetShaderiv(TE, GL_COMPILE_STATUS, &rc));
+
+    if (tcShaderName.size() > 1)
+        {
+        std::string tcShaderString = readFileAsString(tcShaderName);
+        tcshader = tcShaderString.c_str();
+        CHECKED_GL_CALL(glShaderSource(TC, 1, &tcshader, NULL));
+        }
+
+
+    // Compile vertex shader
+    CHECKED_GL_CALL(glCompileShader(VS));
+    CHECKED_GL_CALL(glGetShaderiv(VS, GL_COMPILE_STATUS, &rc));
     if (!rc)
     {
         if (isVerbose())
         {
-            GLSL::printShaderInfoLog(TE);
-            std::cout << "Error compiling TE shader " << teShaderName << std::endl;
+            GLSL::printShaderInfoLog(VS);
+            std::cout << "Error compiling vertex shader " << vShaderName << std::endl;
         }
         return false;
     }
+
+    // Compile TE
+    if (teshader)
+        {
+        CHECKED_GL_CALL(glCompileShader(TE));
+        CHECKED_GL_CALL(glGetShaderiv(TE, GL_COMPILE_STATUS, &rc));
+        if (!rc)
+            {
+            if (isVerbose())
+                {
+                GLSL::printShaderInfoLog(TE);
+                std::cout << "Error compiling TE shader " << teShaderName << std::endl;
+                }
+            return false;
+            }
+        }
 
     // Compile TC
-    CHECKED_GL_CALL(glCompileShader(TC));
-    CHECKED_GL_CALL(glGetShaderiv(TC, GL_COMPILE_STATUS, &rc));
+    if (tcshader)
+        {
+        CHECKED_GL_CALL(glCompileShader(TC));
+        CHECKED_GL_CALL(glGetShaderiv(TC, GL_COMPILE_STATUS, &rc));
+        if (!rc)
+            {
+            if (isVerbose())
+                {
+                GLSL::printShaderInfoLog(TC);
+                std::cout << "Error compiling TC shader " << tcShaderName << std::endl;
+                }
+            return false;
+            }
+        }
+    // Compile fragment shader
+    CHECKED_GL_CALL(glCompileShader(FS));
+    CHECKED_GL_CALL(glGetShaderiv(FS, GL_COMPILE_STATUS, &rc));
     if (!rc)
     {
         if (isVerbose())
         {
-            GLSL::printShaderInfoLog(TC);
-            std::cout << "Error compiling TC shader " << tcShaderName << std::endl;
+            GLSL::printShaderInfoLog(FS);
+            std::cout << "Error compiling fragment shader " << fShaderName << std::endl;
         }
         return false;
     }
-    
-	// Compile fragment shader
-	CHECKED_GL_CALL(glCompileShader(FS));
-	CHECKED_GL_CALL(glGetShaderiv(FS, GL_COMPILE_STATUS, &rc));
-	if (!rc)
-	{
-		if (isVerbose())
-		{
-			GLSL::printShaderInfoLog(FS);
-			std::cout << "Error compiling fragment shader " << fShaderName << std::endl;
-		}
-		return false;
-	}
 
-	// Create the program and link
-	pid = glCreateProgram();
-	CHECKED_GL_CALL(glAttachShader(pid, VS));
-	CHECKED_GL_CALL(glAttachShader(pid, FS));
-    CHECKED_GL_CALL(glAttachShader(pid, TC));
-    CHECKED_GL_CALL(glAttachShader(pid, TE));
-    
-	CHECKED_GL_CALL(glLinkProgram(pid));
-	CHECKED_GL_CALL(glGetProgramiv(pid, GL_LINK_STATUS, &rc));
-	if (!rc)
-	{
-		if (isVerbose())
-		{
-			GLSL::printProgramInfoLog(pid);
-			std::cout << "Error linking shaders " << vShaderName << " and " << fShaderName << std::endl;
-		}
-		return false;
-	}
+    // Create the program and link
+    pid = glCreateProgram();
+    CHECKED_GL_CALL(glAttachShader(pid, VS));
+    CHECKED_GL_CALL(glAttachShader(pid, FS));
+    if (tcshader)CHECKED_GL_CALL(glAttachShader(pid, TC));
+    if (teshader)CHECKED_GL_CALL(glAttachShader(pid, TE));
 
-	return true;
+    CHECKED_GL_CALL(glLinkProgram(pid));
+    CHECKED_GL_CALL(glGetProgramiv(pid, GL_LINK_STATUS, &rc));
+    if (!rc)
+    {
+        if (isVerbose())
+        {
+            GLSL::printProgramInfoLog(pid);
+            std::cout << "Error linking shaders " << vShaderName << " and " << fShaderName << std::endl;
+        }
+        return false;
+    }
+
+    return true;
 }
 
 void Program::bind()
 {
-	CHECKED_GL_CALL(glUseProgram(pid));
+    CHECKED_GL_CALL(glUseProgram(pid));
 }
 
 void Program::unbind()
 {
-	CHECKED_GL_CALL(glUseProgram(0));
+    CHECKED_GL_CALL(glUseProgram(0));
 }
 
 void Program::addAttribute(const std::string &name)
 {
-	attributes[name] = GLSL::getAttribLocation(pid, name.c_str(), isVerbose());
+    attributes[name] = GLSL::getAttribLocation(pid, name.c_str(), isVerbose());
 }
 
 void Program::addUniform(const std::string &name)
 {
-	uniforms[name] = GLSL::getUniformLocation(pid, name.c_str(), isVerbose());
+    uniforms[name] = GLSL::getUniformLocation(pid, name.c_str(), isVerbose());
 }
 
 GLint Program::getAttribute(const std::string &name) const
 {
-	std::map<std::string, GLint>::const_iterator attribute = attributes.find(name.c_str());
-	if (attribute == attributes.end())
-	{
-		if (isVerbose())
-		{
-			std::cout << name << " is not an attribute variable" << std::endl;
-		}
-		return -1;
-	}
-	return attribute->second;
+    std::map<std::string, GLint>::const_iterator attribute = attributes.find(name.c_str());
+    if (attribute == attributes.end())
+    {
+        if (isVerbose())
+        {
+            std::cout << name << " is not an attribute variable" << std::endl;
+        }
+        return -1;
+    }
+    return attribute->second;
 }
 
 GLint Program::getUniform(const std::string &name) const
 {
-	std::map<std::string, GLint>::const_iterator uniform = uniforms.find(name.c_str());
-	if (uniform == uniforms.end())
-	{
-		if (isVerbose())
-		{
-			std::cout << name << " is not a uniform variable" << std::endl;
-		}
-		return -1;
-	}
-	return uniform->second;
+    std::map<std::string, GLint>::const_iterator uniform = uniforms.find(name.c_str());
+    if (uniform == uniforms.end())
+    {
+        if (isVerbose())
+        {
+            std::cout << name << " is not a uniform variable" << std::endl;
+        }
+        return -1;
+    }
+    return uniform->second;
 }

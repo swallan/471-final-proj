@@ -7,7 +7,8 @@ uniform mat4 V;
 uniform mat4 M;
 uniform sampler2D tex;
 uniform vec3 camoff;
-out vec2 frag_tex;
+out vec2 TexCoords;
+out vec3 vertex_pos;
 
 float hash(float n) { return fract(sin(n) * 753.5453123); }
 float snoise(vec3 x)
@@ -59,7 +60,8 @@ void main()
     pos.y +=height;
 
 
-    frag_tex = Tex;
+    TexCoords = Tex;
     gl_Position = P * V * pos;
+    vertex_pos = gl_Position.xyz;
 
 }

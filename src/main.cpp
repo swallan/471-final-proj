@@ -441,22 +441,22 @@ public:
         
 		//[TWOTEXTURES]
 		//set the 2 textures to the correct samplers in the fragment shader:
-		GLuint Tex1Location = glGetUniformLocation(prog->pid, "tex");//tex, tex2... sampler in the fragment shader
-		GLuint Tex2Location = glGetUniformLocation(prog->pid, "tex2");
-		// Then bind the uniform samplers to texture units:
-		glUseProgram(prog->pid);
-		glUniform1i(Tex1Location, 0);
-		glUniform1i(Tex2Location, 1);
+//		GLuint Tex1Location = glGetUniformLocation(prog->pid, "tex");//tex, tex2... sampler in the fragment shader
+//		GLuint Tex2Location = glGetUniformLocation(prog->pid, "tex2");
+//		// Then bind the uniform samplers to texture units:
+//		glUseProgram(prog->pid);
+//		glUniform1i(Tex1Location, 0);
+//		glUniform1i(Tex2Location, 1);
+//
+//		Tex1Location = glGetUniformLocation(psky->pid, "tex");//tex, tex2... sampler in the fragment shader
+//		Tex2Location = glGetUniformLocation(psky->pid, "tex2");
+//		// Then bind the uniform samplers to texture units:
+//		glUseProgram(psky->pid);
+//		glUniform1i(Tex1Location, 0);
+//		glUniform1i(Tex2Location, 1);
 
-		Tex1Location = glGetUniformLocation(psky->pid, "tex");//tex, tex2... sampler in the fragment shader
-		Tex2Location = glGetUniformLocation(psky->pid, "tex2");
-		// Then bind the uniform samplers to texture units:
-		glUseProgram(psky->pid);
-		glUniform1i(Tex1Location, 0);
-		glUniform1i(Tex2Location, 1);
-
-        Tex1Location = glGetUniformLocation(heightshader->pid, "tex");//tex, tex2... sampler in the fragment shader
-        Tex2Location = glGetUniformLocation(heightshader->pid, "tex2");
+        GLuint Tex1Location = glGetUniformLocation(heightshader->pid, "tex");//tex, tex2... sampler in the fragment shader
+        GLuint Tex2Location = glGetUniformLocation(heightshader->pid, "tex2");
         // Then bind the uniform samplers to texture units:
         glUseProgram(heightshader->pid);
         glUniform1i(Tex1Location, 0);
@@ -470,14 +470,14 @@ public:
 //        glUniform1i(Tex2Location, 1);
         
 //
-        Tex1Location = glGetUniformLocation(house_floor->pid, "tex");
-        glUseProgram(house_floor->pid);
-        glUniform1i(Tex1Location, 0);
-        
-        Tex1Location = glGetUniformLocation(house_wall->pid, "tex");
-        glUseProgram(house_wall->pid);
-        glUniform1i(Tex1Location, 0);
+//        Tex1Location = glGetUniformLocation(house_floor->pid, "tex");
+//        glUseProgram(house_floor->pid);
+//        glUniform1i(Tex1Location, 0);
 //
+//        Tex1Location = glGetUniformLocation(house_wall->pid, "tex");
+//        glUseProgram(house_wall->pid);
+//        glUniform1i(Tex1Location, 0);
+////
         
         
         glfwGetFramebufferSize(windowManager->getHandle(), &width, &height);
@@ -538,8 +538,8 @@ public:
         }
         
         
-        Tex1Location = glGetUniformLocation(prog_framebuffer->pid, "colorTexure");
-        Tex2Location = glGetUniformLocation(prog_framebuffer->pid, "BWTexure");
+         Tex1Location = glGetUniformLocation(prog_framebuffer->pid, "colorTexure");
+         Tex2Location = glGetUniformLocation(prog_framebuffer->pid, "BWTexure");
         GLuint Tex3Location = glGetUniformLocation(prog_framebuffer->pid, "bloom");
         glUseProgram(prog_framebuffer->pid);
         glUniform1i(Tex1Location, 0);
@@ -697,7 +697,7 @@ public:
         
         prog_framebuffer = make_shared<Program>();
         prog_framebuffer-> setVerbose(true);
-        prog_framebuffer->setShaderNames(shaderDirectory + "/vertFB.glsl", shaderDirectory + "/fragFB.glsl", shaderDirectory + "/fbo_tess_control.glsl", shaderDirectory + "/fbo_tess_eval.glsl");
+        prog_framebuffer->setShaderNames(shaderDirectory + "/vertFB.glsl", shaderDirectory + "/fragFB.glsl", "", "");
         if (!prog_framebuffer->init()){
             std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
             exit(1);

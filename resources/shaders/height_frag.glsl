@@ -1,11 +1,15 @@
 #version 330 core
-out vec4 color;
+layout(location = 0) out vec4 color;
+layout(location = 1) out vec4 colorBW;
 
-in vec2 frag_tex;
+in vec2 TexCoords;
+in vec3 vertex_pos;
 void main()
 {
-color = vec4(1,1,1,1);
-color.rg = frag_tex;
+    color = vec4(1,.4,1,1);
+    color.rg = TexCoords;
+    colorBW = color;
+    //color.rg = TexCoords;
 }
 
 //#version 330 core
