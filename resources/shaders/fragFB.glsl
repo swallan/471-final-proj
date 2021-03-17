@@ -4,7 +4,6 @@ in vec2 fragTex;
 uniform sampler2D colorTexure;
 uniform sampler2D BWTexure;
 uniform sampler2D bloom;
-
 uniform float raysOn;
 uniform mat4 P;
 uniform mat4 V;
@@ -17,8 +16,7 @@ uniform mat4 M1;
 in vec2 TexCoords;
 void main()
 {
-    color = texture(BWTexure, TexCoords.xy);
-//    color.rgb = vec3(fragTex, raysOn);
+    color = texture(colorTexure, TexCoords.xy);
     color.a = 1;
     return;
     

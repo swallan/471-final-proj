@@ -441,22 +441,22 @@ public:
         
 		//[TWOTEXTURES]
 		//set the 2 textures to the correct samplers in the fragment shader:
-//		GLuint Tex1Location = glGetUniformLocation(prog->pid, "tex");//tex, tex2... sampler in the fragment shader
-//		GLuint Tex2Location = glGetUniformLocation(prog->pid, "tex2");
-//		// Then bind the uniform samplers to texture units:
-//		glUseProgram(prog->pid);
-//		glUniform1i(Tex1Location, 0);
-//		glUniform1i(Tex2Location, 1);
-//
-//		Tex1Location = glGetUniformLocation(psky->pid, "tex");//tex, tex2... sampler in the fragment shader
-//		Tex2Location = glGetUniformLocation(psky->pid, "tex2");
-//		// Then bind the uniform samplers to texture units:
-//		glUseProgram(psky->pid);
-//		glUniform1i(Tex1Location, 0);
-//		glUniform1i(Tex2Location, 1);
+		GLuint Tex1Location = glGetUniformLocation(prog->pid, "tex");//tex, tex2... sampler in the fragment shader
+		GLuint Tex2Location = glGetUniformLocation(prog->pid, "tex2");
+		// Then bind the uniform samplers to texture units:
+		glUseProgram(prog->pid);
+		glUniform1i(Tex1Location, 0);
+		glUniform1i(Tex2Location, 1);
 
-        GLuint Tex1Location = glGetUniformLocation(heightshader->pid, "tex");//tex, tex2... sampler in the fragment shader
-        GLuint Tex2Location = glGetUniformLocation(heightshader->pid, "tex2");
+		Tex1Location = glGetUniformLocation(psky->pid, "tex");//tex, tex2... sampler in the fragment shader
+		Tex2Location = glGetUniformLocation(psky->pid, "tex2");
+		// Then bind the uniform samplers to texture units:
+		glUseProgram(psky->pid);
+		glUniform1i(Tex1Location, 0);
+		glUniform1i(Tex2Location, 1);
+
+        Tex1Location = glGetUniformLocation(heightshader->pid, "tex");//tex, tex2... sampler in the fragment shader
+        Tex2Location = glGetUniformLocation(heightshader->pid, "tex2");
         // Then bind the uniform samplers to texture units:
         glUseProgram(heightshader->pid);
         glUniform1i(Tex1Location, 0);
@@ -470,14 +470,14 @@ public:
 //        glUniform1i(Tex2Location, 1);
         
 //
-//        Tex1Location = glGetUniformLocation(house_floor->pid, "tex");
-//        glUseProgram(house_floor->pid);
-//        glUniform1i(Tex1Location, 0);
+        Tex1Location = glGetUniformLocation(house_floor->pid, "tex");
+        glUseProgram(house_floor->pid);
+        glUniform1i(Tex1Location, 0);
+        
+        Tex1Location = glGetUniformLocation(house_wall->pid, "tex");
+        glUseProgram(house_wall->pid);
+        glUniform1i(Tex1Location, 0);
 //
-//        Tex1Location = glGetUniformLocation(house_wall->pid, "tex");
-//        glUseProgram(house_wall->pid);
-//        glUniform1i(Tex1Location, 0);
-////
         
         
         glfwGetFramebufferSize(windowManager->getHandle(), &width, &height);
@@ -538,8 +538,8 @@ public:
         }
         
         
-         Tex1Location = glGetUniformLocation(prog_framebuffer->pid, "colorTexure");
-         Tex2Location = glGetUniformLocation(prog_framebuffer->pid, "BWTexure");
+        Tex1Location = glGetUniformLocation(prog_framebuffer->pid, "colorTexure");
+        Tex2Location = glGetUniformLocation(prog_framebuffer->pid, "BWTexure");
         GLuint Tex3Location = glGetUniformLocation(prog_framebuffer->pid, "bloom");
         glUseProgram(prog_framebuffer->pid);
         glUniform1i(Tex1Location, 0);
@@ -560,28 +560,28 @@ public:
 		glEnable(GL_DEPTH_TEST);
 		//glDisable(GL_DEPTH_TEST);
 		// Initialize the GLSL program.
-//		prog = std::make_shared<Program>();
-//		prog->setVerbose(true);
-//		prog->setShaderNames(shaderDirectory + "/shader_vertex.glsl", resourceDirectory + "/shaders/shader_fragment.glsl", shaderDirectory + "/tess_control.glsl", shaderDirectory + "/tess_eval.glsl");
-//		if (!prog->init())
-//		{
-//			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
-//			exit(1);
-//		}
-//		prog->addUniform("P");
-//		prog->addUniform("V");
-//		prog->addUniform("M");
-//		prog->addUniform("campos");
-//		prog->addAttribute("vertPos");
-//		prog->addAttribute("vertNor");
-//		prog->addAttribute("vertTex");
-//        
+		prog = std::make_shared<Program>();
+		prog->setVerbose(true);
+		prog->setShaderNames(shaderDirectory + "/shader_vertex.glsl", resourceDirectory + "/shaders/shader_fragment.glsl");
+		if (!prog->init())
+		{
+			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
+			exit(1);
+		}
+		prog->addUniform("P");
+		prog->addUniform("V");
+		prog->addUniform("M");
+		prog->addUniform("campos");
+		prog->addAttribute("vertPos");
+		prog->addAttribute("vertNor");
+		prog->addAttribute("vertTex");
+        
         
         
         
         heightshader = std::make_shared<Program>();
         heightshader->setVerbose(true);
-        heightshader->setShaderNames(shaderDirectory + "/height_vertex.glsl", resourceDirectory + "/shaders/height_frag.glsl", shaderDirectory + "/tess_control.glsl", shaderDirectory + "/tess_eval.glsl");
+        heightshader->setShaderNames(shaderDirectory + "/height_vertex.glsl", resourceDirectory + "/shaders/height_frag.glsl");
         if (!heightshader->init())
         {
             std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
@@ -615,89 +615,89 @@ public:
 //        cloud->addAttribute("vertNor");
 //        cloud->addUniform("isBW");
 
+
+		psky = std::make_shared<Program>();
+		psky->setVerbose(true);
+		psky->setShaderNames(shaderDirectory + "/skyvertex.glsl", shaderDirectory + "/skyfrag.glsl");
+		if (!psky->init())
+		{
+			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
+			exit(1);
+		}
+		psky->addUniform("dn");
+		psky->addUniform("P");
+		psky->addUniform("V");
+		psky->addUniform("M");
+		psky->addUniform("campos");
+		psky->addAttribute("vertPos");
+		psky->addAttribute("vertNor");
+		psky->addAttribute("vertTex");
+        
+        
+        house_floor = std::make_shared<Program>();
+        house_floor->setVerbose(true);
+        house_floor->setShaderNames(shaderDirectory + "/floor_vert.glsl", shaderDirectory + "/floor_frag.glsl");
+        if (!house_floor->init())
+        {
+            std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
+            exit(1);
+        }
+        house_floor->addUniform("P");
+        house_floor->addUniform("V");
+        house_floor->addUniform("M");
 //
-//		psky = std::make_shared<Program>();
-//		psky->setVerbose(true);
-//		psky->setShaderNames(shaderDirectory + "/skyvertex.glsl", shaderDirectory + "/skyfrag.glsl", shaderDirectory + "/tess_control.glsl", shaderDirectory + "/tess_eval.glsl");
-//		if (!psky->init())
-//		{
-//			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
-//			exit(1);
-//		}
-//		psky->addUniform("dn");
-//		psky->addUniform("P");
-//		psky->addUniform("V");
-//		psky->addUniform("M");
-//		psky->addUniform("campos");
-//		psky->addAttribute("vertPos");
-//		psky->addAttribute("vertNor");
-//		psky->addAttribute("vertTex");
-//
-//
-//        house_floor = std::make_shared<Program>();
-//        house_floor->setVerbose(true);
-//        house_floor->setShaderNames(shaderDirectory + "/floor_vert.glsl", shaderDirectory + "/floor_frag.glsl", shaderDirectory + "/tess_control.glsl", shaderDirectory + "/tess_eval.glsl");
-//        if (!house_floor->init())
-//        {
-//            std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
-//            exit(1);
-//        }
-//        house_floor->addUniform("P");
-//        house_floor->addUniform("V");
-//        house_floor->addUniform("M");
-////
-//        house_floor->addUniform("x");
-//        house_floor->addUniform("y");
-//        house_floor->addUniform("z");
-//
-//        house_floor->addUniform("campos");
-//        house_floor->addAttribute("vertPos");
-//        house_floor->addAttribute("vertNor");
-//        house_floor->addAttribute("vertTex");
-//        house_floor->addUniform("isBW");
-//
-//
-//        house_wall = std::make_shared<Program>();
-//        house_wall->setVerbose(true);
-//        house_wall->setShaderNames(shaderDirectory + "/wall_vert.glsl", shaderDirectory + "/wall_frag.glsl", shaderDirectory + "/tess_control.glsl", shaderDirectory + "/tess_eval.glsl");
-//        if (!house_wall->init())
-//        {
-//            std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
-//            exit(1);
-//        }
-//        house_wall->addUniform("P");
-//        house_wall->addUniform("V");
-//        house_wall->addUniform("M");
-//        house_wall->addUniform("x");
-//        house_wall->addUniform("y");
-//        house_wall->addUniform("z");
-//        house_wall->addUniform("campos");
-//        house_wall->addAttribute("vertPos");
-//        house_wall->addAttribute("vertNor");
-//        house_wall->addAttribute("vertTex");
-//        house_wall->addUniform("isBW");
-//
-//        lightBulb = std::make_shared<Program>();
-//        lightBulb->setVerbose(true);
-//        lightBulb->setShaderNames(shaderDirectory + "/lightBulb_vert.glsl", shaderDirectory + "/lightBulb_frag.glsl", shaderDirectory + "/tess_control.glsl", shaderDirectory + "/tess_eval.glsl");
-//        if (!lightBulb->init())
-//        {
-//            std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
-//            exit(1);
-//        }
-//        lightBulb->addUniform("P");
-//        lightBulb->addUniform("V");
-//        lightBulb->addUniform("M");
-//        lightBulb->addUniform("isSUN");
-//        lightBulb->addUniform("isBW");
-//        lightBulb->addUniform("campos");
-//        lightBulb->addAttribute("vertPos");
-//        lightBulb->addAttribute("vertNor");
-//        lightBulb->addAttribute("vertTex");
+        house_floor->addUniform("x");
+        house_floor->addUniform("y");
+        house_floor->addUniform("z");
+        
+        house_floor->addUniform("campos");
+        house_floor->addAttribute("vertPos");
+        house_floor->addAttribute("vertNor");
+        house_floor->addAttribute("vertTex");
+        house_floor->addUniform("isBW");
+        
+        
+        house_wall = std::make_shared<Program>();
+        house_wall->setVerbose(true);
+        house_wall->setShaderNames(shaderDirectory + "/wall_vert.glsl", shaderDirectory + "/wall_frag.glsl");
+        if (!house_wall->init())
+        {
+            std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
+            exit(1);
+        }
+        house_wall->addUniform("P");
+        house_wall->addUniform("V");
+        house_wall->addUniform("M");
+        house_wall->addUniform("x");
+        house_wall->addUniform("y");
+        house_wall->addUniform("z");
+        house_wall->addUniform("campos");
+        house_wall->addAttribute("vertPos");
+        house_wall->addAttribute("vertNor");
+        house_wall->addAttribute("vertTex");
+        house_wall->addUniform("isBW");
+        
+        lightBulb = std::make_shared<Program>();
+        lightBulb->setVerbose(true);
+        lightBulb->setShaderNames(shaderDirectory + "/lightBulb_vert.glsl", shaderDirectory + "/lightBulb_frag.glsl");
+        if (!lightBulb->init())
+        {
+            std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
+            exit(1);
+        }
+        lightBulb->addUniform("P");
+        lightBulb->addUniform("V");
+        lightBulb->addUniform("M");
+        lightBulb->addUniform("isSUN");
+        lightBulb->addUniform("isBW");
+        lightBulb->addUniform("campos");
+        lightBulb->addAttribute("vertPos");
+        lightBulb->addAttribute("vertNor");
+        lightBulb->addAttribute("vertTex");
         
         prog_framebuffer = make_shared<Program>();
         prog_framebuffer-> setVerbose(true);
-        prog_framebuffer->setShaderNames(shaderDirectory + "/vertFB.glsl", shaderDirectory + "/fragFB.glsl", "", "");
+        prog_framebuffer->setShaderNames(shaderDirectory + "/vertFB.glsl", shaderDirectory + "/fragFB.glsl");
         if (!prog_framebuffer->init()){
             std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
             exit(1);
@@ -780,21 +780,14 @@ public:
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, FBOtexColor);
         
-        // black and white
-//        if (mycam.godRays == true){
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, FBOtexBW);
-//        }
-        
-       
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, FBOtexBW);
+
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, FBObloom);
         
         glBindVertexArray(VertexArrayIDRect);
         glDrawArrays(GL_TRIANGLES, 0,6);
-        
-//        glBindVertexArray(VertexArrayIDRectBW);
-//        glDrawArrays(GL_TRIANGLES, 0,6);
   
         prog_framebuffer->unbind();
         
@@ -841,27 +834,27 @@ public:
 
 		M = TransSky * RotateXSky * SSky;
 
-//
-//		psky->bind();
-//		glUniformMatrix4fv(psky->getUniform("P"), 1, GL_FALSE, &P[0][0]);
-//		glUniformMatrix4fv(psky->getUniform("V"), 1, GL_FALSE, &V[0][0]);
-//		glUniformMatrix4fv(psky->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-////        glUniformMatrix4fv(psky->getUniform("P1"), 1, GL_FALSE, &P[0][0]);
-////        glUniformMatrix4fv(psky->getUniform("V1"), 1, GL_FALSE, &V[0][0]);
-////        glUniformMatrix4fv(psky->getUniform("M1"), 1, GL_FALSE, &M[0][0]);
-//		glUniform3fv(psky->getUniform("campos"), 1, &mycam.pos[0]);
-//		glActiveTexture(GL_TEXTURE0);
-//		glBindTexture(GL_TEXTURE_2D, Texture2);
-//		glActiveTexture(GL_TEXTURE1);
-//		glBindTexture(GL_TEXTURE_2D, TextureN);
-//		static float ttime = 0;
-//		ttime += frametime;
-//		float dn = sin(ttime)*0.5 +0.5;
-//		glUniform1f(psky->getUniform("dn"), dn);
-//		glDisable(GL_DEPTH_TEST);
-////		shape->draw(psky, false);
-//        glEnable(GL_DEPTH_TEST);
-//		psky->unbind();
+
+		psky->bind();
+		glUniformMatrix4fv(psky->getUniform("P"), 1, GL_FALSE, &P[0][0]);
+		glUniformMatrix4fv(psky->getUniform("V"), 1, GL_FALSE, &V[0][0]);
+		glUniformMatrix4fv(psky->getUniform("M"), 1, GL_FALSE, &M[0][0]);
+//        glUniformMatrix4fv(psky->getUniform("P1"), 1, GL_FALSE, &P[0][0]);
+//        glUniformMatrix4fv(psky->getUniform("V1"), 1, GL_FALSE, &V[0][0]);
+//        glUniformMatrix4fv(psky->getUniform("M1"), 1, GL_FALSE, &M[0][0]);
+		glUniform3fv(psky->getUniform("campos"), 1, &mycam.pos[0]);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, Texture2);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, TextureN);
+		static float ttime = 0;
+		ttime += frametime;
+		float dn = sin(ttime)*0.5 +0.5;
+		glUniform1f(psky->getUniform("dn"), dn);
+		glDisable(GL_DEPTH_TEST);
+		shape->draw(psky, false);
+        glEnable(GL_DEPTH_TEST);
+		psky->unbind();
         
         int num = 100;
         
@@ -918,102 +911,102 @@ public:
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, Texture);
         
-        glPatchParameteri(GL_PATCH_VERTICES, 3);
+//        glPatchParameteri(GL_PATCH_VERTICES, 3);
 
         glDrawElements(GL_TRIANGLES, MESHSIZE * MESHSIZE * 6 , GL_UNSIGNED_SHORT, (void*)0);
         heightshader->unbind();
-//
-////        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//        glEnable(GL_BLEND);
-//        house_floor->bind();
-//        T = translate(mat4(1.0f), vec3(0.0f, -.55f, 0.0f));
-//        M = T;
-//        glUniformMatrix4fv(house_floor->getUniform("P"), 1, GL_FALSE, &P[0][0]);
-//        glUniformMatrix4fv(house_floor->getUniform("V"), 1, GL_FALSE, &V[0][0]);
-//        glUniformMatrix4fv(house_floor->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-//        glUniform3fv(house_floor->getUniform("campos"), 1, &mycam.pos[0]);
-//
-//        glUniform1f(house_floor->getUniform("x"), 1.0);
-//        glUniform1f(house_floor->getUniform("y"), 2.0);
-//        glUniform1f(house_floor->getUniform("z"),5.0);
-//
-//        glActiveTexture(GL_TEXTURE0);
-//        glBindTexture(GL_TEXTURE_2D, floorTexture);
-////        flr->draw(house_floor, false);
-//        house_floor->unbind();
-//
-//        // back wall
-//        house_wall->bind();
-//        mat4 R = rotate(mat4(1.0f), 3.14f / 2.0f, vec3(0.0f, 0.0f, 1.0f));
-//        T = glm::translate(mat4(1.0f), vec3(.55f, 0.0f, 0.0f));
-//        M = T * R;
-//        glUniformMatrix4fv(house_wall->getUniform("P"), 1, GL_FALSE, &P[0][0]);
-//        glUniformMatrix4fv(house_wall->getUniform("V"), 1, GL_FALSE, &V[0][0]);
-//        glUniformMatrix4fv(house_wall->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-//        glUniform3fv(house_wall->getUniform("campos"), 1, &mycam.pos[0]);
-//
-//        glActiveTexture(GL_TEXTURE0);
-//        glBindTexture(GL_TEXTURE_2D, wallTexture);
-////        wall->draw(house_wall, false);
-//
-//
-//        // side wall 1
-//
-//        S = scale(mat4(1.0f), vec3(1.0f, .55f, 1.0f));
-//        R = rotate(mat4(1.0f), 3.14f / 2.0f, vec3(1.0f, 0.0f, 0.0f));
-//        T = glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, 1.0f));
-//        M = S * T * R;
-//        glUniformMatrix4fv(house_wall->getUniform("P"), 1, GL_FALSE, &P[0][0]);
-//        glUniformMatrix4fv(house_wall->getUniform("V"), 1, GL_FALSE, &V[0][0]);
-//        glUniformMatrix4fv(house_wall->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-//        glUniform3fv(house_wall->getUniform("campos"), 1, &mycam.pos[0]);
-//        glActiveTexture(GL_TEXTURE0);
-//        glBindTexture(GL_TEXTURE_2D, wallTexture);
-////        wall->draw(house_wall, false);
-//
-//        // side wall 2
-//
-//        S = scale(mat4(1.0f), vec3(1.0f, .55f, 1.0f));
-//        R = rotate(mat4(1.0f), 3.14f / 2.0f, vec3(1.0f, 0.0f, 0.0f));
-//        T = glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, -1.0f));
-//        M = S * T * R;
-//        glUniformMatrix4fv(house_wall->getUniform("P"), 1, GL_FALSE, &P[0][0]);
-//        glUniformMatrix4fv(house_wall->getUniform("V"), 1, GL_FALSE, &V[0][0]);
-//        glUniformMatrix4fv(house_wall->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-//        glUniform3fv(house_wall->getUniform("campos"), 1, &mycam.pos[0]);
-//        GLSL::checkError("GET_FILE_LINE");
-//        glActiveTexture(GL_TEXTURE0);
-//        glBindTexture(GL_TEXTURE_2D, wallTexture);
-////        wall->draw(house_wall, false);
-//        house_wall->unbind();
-//
-//        // lightbulb
-//        lightBulb->bind();
-//        S = scale(mat4(1.0f), sunSCALE);
-//        T = translate(mat4(1.0f), sunLOC);
-//        M = T * S;
-//        glUniformMatrix4fv(lightBulb->getUniform("P"), 1, GL_FALSE, &P[0][0]);
-//        glUniformMatrix4fv(lightBulb->getUniform("V"), 1, GL_FALSE, &V[0][0]);
-//        glUniformMatrix4fv(lightBulb->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-//        glUniform1f(lightBulb->getUniform("isSUN"),1.0f);
-//        glUniform3fv(lightBulb->getUniform("campos"), 1, &mycam.pos[0]);
-//        glUniform1f(lightBulb->getUniform("isBW"),0.0f);
-////        shape->draw(lightBulb, false);
-//
-//        S = scale(mat4(1.0f), vec3(.1, .1, .1));
-//        T = translate(mat4(1.0f), vec3(0.0f, .50f, 0.0f));
-//        M = T * S;
-//        glUniformMatrix4fv(lightBulb->getUniform("P"), 1, GL_FALSE, &P[0][0]);
-//        glUniformMatrix4fv(lightBulb->getUniform("V"), 1, GL_FALSE, &V[0][0]);
-//        glUniformMatrix4fv(lightBulb->getUniform("M"), 1, GL_FALSE, &M[0][0]);
-//        glUniform1f(lightBulb->getUniform("isSUN"),0.0f);
-//        glUniform3fv(lightBulb->getUniform("campos"), 1, &mycam.pos[0]);
-//        glUniform1f(lightBulb->getUniform("isBW"),0.0f);
-////        shape->draw(lightBulb, false);
-//
-//        lightBulb->unbind();
-//
-//
+        
+//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_BLEND);
+        house_floor->bind();
+        T = translate(mat4(1.0f), vec3(0.0f, -.55f, 0.0f));
+        M = T;
+        glUniformMatrix4fv(house_floor->getUniform("P"), 1, GL_FALSE, &P[0][0]);
+        glUniformMatrix4fv(house_floor->getUniform("V"), 1, GL_FALSE, &V[0][0]);
+        glUniformMatrix4fv(house_floor->getUniform("M"), 1, GL_FALSE, &M[0][0]);
+        glUniform3fv(house_floor->getUniform("campos"), 1, &mycam.pos[0]);
+        
+        glUniform1f(house_floor->getUniform("x"), 1.0);
+        glUniform1f(house_floor->getUniform("y"), 2.0);
+        glUniform1f(house_floor->getUniform("z"),5.0);
+        
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, floorTexture);
+        flr->draw(house_floor, false);
+        house_floor->unbind();
+        
+        // back wall
+        house_wall->bind();
+        mat4 R = rotate(mat4(1.0f), 3.14f / 2.0f, vec3(0.0f, 0.0f, 1.0f));
+        T = glm::translate(mat4(1.0f), vec3(.55f, 0.0f, 0.0f));
+        M = T * R;
+        glUniformMatrix4fv(house_wall->getUniform("P"), 1, GL_FALSE, &P[0][0]);
+        glUniformMatrix4fv(house_wall->getUniform("V"), 1, GL_FALSE, &V[0][0]);
+        glUniformMatrix4fv(house_wall->getUniform("M"), 1, GL_FALSE, &M[0][0]);
+        glUniform3fv(house_wall->getUniform("campos"), 1, &mycam.pos[0]);
+ 
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, wallTexture);
+        wall->draw(house_wall, false);
+       
+        
+        // side wall 1
+     
+        S = scale(mat4(1.0f), vec3(1.0f, .55f, 1.0f));
+        R = rotate(mat4(1.0f), 3.14f / 2.0f, vec3(1.0f, 0.0f, 0.0f));
+        T = glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, 1.0f));
+        M = S * T * R;
+        glUniformMatrix4fv(house_wall->getUniform("P"), 1, GL_FALSE, &P[0][0]);
+        glUniformMatrix4fv(house_wall->getUniform("V"), 1, GL_FALSE, &V[0][0]);
+        glUniformMatrix4fv(house_wall->getUniform("M"), 1, GL_FALSE, &M[0][0]);
+        glUniform3fv(house_wall->getUniform("campos"), 1, &mycam.pos[0]);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, wallTexture);
+        wall->draw(house_wall, false);
+        
+        // side wall 2
+        
+        S = scale(mat4(1.0f), vec3(1.0f, .55f, 1.0f));
+        R = rotate(mat4(1.0f), 3.14f / 2.0f, vec3(1.0f, 0.0f, 0.0f));
+        T = glm::translate(mat4(1.0f), vec3(0.0f, 0.0f, -1.0f));
+        M = S * T * R;
+        glUniformMatrix4fv(house_wall->getUniform("P"), 1, GL_FALSE, &P[0][0]);
+        glUniformMatrix4fv(house_wall->getUniform("V"), 1, GL_FALSE, &V[0][0]);
+        glUniformMatrix4fv(house_wall->getUniform("M"), 1, GL_FALSE, &M[0][0]);
+        glUniform3fv(house_wall->getUniform("campos"), 1, &mycam.pos[0]);
+        GLSL::checkError("GET_FILE_LINE");
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, wallTexture);
+        wall->draw(house_wall, false);
+        house_wall->unbind();
+        
+        // lightbulb
+        lightBulb->bind();
+        S = scale(mat4(1.0f), sunSCALE);
+        T = translate(mat4(1.0f), sunLOC);
+        M = T * S;
+        glUniformMatrix4fv(lightBulb->getUniform("P"), 1, GL_FALSE, &P[0][0]);
+        glUniformMatrix4fv(lightBulb->getUniform("V"), 1, GL_FALSE, &V[0][0]);
+        glUniformMatrix4fv(lightBulb->getUniform("M"), 1, GL_FALSE, &M[0][0]);
+        glUniform1f(lightBulb->getUniform("isSUN"),1.0f);
+        glUniform3fv(lightBulb->getUniform("campos"), 1, &mycam.pos[0]);
+        glUniform1f(lightBulb->getUniform("isBW"),0.0f);
+        shape->draw(lightBulb, false);
+
+        S = scale(mat4(1.0f), vec3(.1, .1, .1));
+        T = translate(mat4(1.0f), vec3(0.0f, .50f, 0.0f));
+        M = T * S;
+        glUniformMatrix4fv(lightBulb->getUniform("P"), 1, GL_FALSE, &P[0][0]);
+        glUniformMatrix4fv(lightBulb->getUniform("V"), 1, GL_FALSE, &V[0][0]);
+        glUniformMatrix4fv(lightBulb->getUniform("M"), 1, GL_FALSE, &M[0][0]);
+        glUniform1f(lightBulb->getUniform("isSUN"),0.0f);
+        glUniform3fv(lightBulb->getUniform("campos"), 1, &mycam.pos[0]);
+        glUniform1f(lightBulb->getUniform("isBW"),0.0f);
+        shape->draw(lightBulb, false);
+        
+        lightBulb->unbind();
+        
+        
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }

@@ -17,6 +17,11 @@ vec4 tcol = texture(tex, vertex_tex*10., 2);
     
  
     
+    
+    
+    
+    
+    
     if (isSUN == 1.0){
         colorBW = vec4(1.0f, 1.0f, 1.0f, 1.0f);
         bloom = vec4(1.0f, 1.0f, 1.0f, 1.0f);
