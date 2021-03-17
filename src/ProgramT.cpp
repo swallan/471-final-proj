@@ -1,5 +1,5 @@
 
-#include "Program.h"
+#include "ProgramT.h"
 #include <iostream>
 #include <cassert>
 #include <fstream>
@@ -21,7 +21,7 @@ std::string readFileAsString(const std::string &fileName)
 	return result;
 }
 
-void Program::setShaderNames(const std::string &v, const std::string &f, const std::string &tc, const std::string &te)
+void ProgramT::setShaderNames(const std::string &v, const std::string &f, const std::string &tc, const std::string &te)
 {
     vShaderName = v;
     fShaderName = f;
@@ -29,7 +29,7 @@ void Program::setShaderNames(const std::string &v, const std::string &f, const s
     tcShaderName = tc;
 }
 
-bool Program::init()
+bool ProgramT::init()
 {
 	GLint rc;
 
@@ -41,7 +41,6 @@ bool Program::init()
     GLuint TC = glCreateShader(GL_TESS_CONTROL_SHADER);
     GLuint TE = glCreateShader(GL_TESS_EVALUATION_SHADER);
 
-
 	// Read shader sources
 	std::string vShaderString = readFileAsString(vShaderName);
 	std::string fShaderString = readFileAsString(fShaderName);
@@ -49,7 +48,6 @@ bool Program::init()
 	const char *fshader = fShaderString.c_str();
 	CHECKED_GL_CALL(glShaderSource(VS, 1, &vshader, NULL));
 	CHECKED_GL_CALL(glShaderSource(FS, 1, &fshader, NULL));
-    
     
     std::string teShaderString = readFileAsString(teShaderName);
     std::string tcShaderString = readFileAsString(tcShaderName);
@@ -71,8 +69,6 @@ bool Program::init()
 		}
 		return false;
 	}
-
-    
     // Compile TE
     CHECKED_GL_CALL(glCompileShader(TE));
     CHECKED_GL_CALL(glGetShaderiv(TE, GL_COMPILE_STATUS, &rc));
@@ -98,7 +94,7 @@ bool Program::init()
         }
         return false;
     }
-    
+
 	// Compile fragment shader
 	CHECKED_GL_CALL(glCompileShader(FS));
 	CHECKED_GL_CALL(glGetShaderiv(FS, GL_COMPILE_STATUS, &rc));
@@ -112,15 +108,16 @@ bool Program::init()
 		return false;
 	}
 
-	// Create the program and link
-	pid = glCreateProgram();
-	CHECKED_GL_CALL(glAttachShader(pid, VS));
-	CHECKED_GL_CALL(glAttachShader(pid, FS));
+
+    // Create the program and link
+    pid = glCreateProgram();
+    CHECKED_GL_CALL(glAttachShader(pid, VS));
+    CHECKED_GL_CALL(glAttachShader(pid, FS));
     CHECKED_GL_CALL(glAttachShader(pid, TC));
     CHECKED_GL_CALL(glAttachShader(pid, TE));
-    
-	CHECKED_GL_CALL(glLinkProgram(pid));
-	CHECKED_GL_CALL(glGetProgramiv(pid, GL_LINK_STATUS, &rc));
+
+    CHECKED_GL_CALL(glLinkProgram(pid));
+    CHECKED_GL_CALL(glGetProgramiv(pid, GL_LINK_STATUS, &rc));
 	if (!rc)
 	{
 		if (isVerbose())
@@ -134,27 +131,27 @@ bool Program::init()
 	return true;
 }
 
-void Program::bind()
+void ProgramT::bind()
 {
 	CHECKED_GL_CALL(glUseProgram(pid));
 }
 
-void Program::unbind()
+void ProgramT::unbind()
 {
 	CHECKED_GL_CALL(glUseProgram(0));
 }
 
-void Program::addAttribute(const std::string &name)
+void ProgramT::addAttribute(const std::string &name)
 {
 	attributes[name] = GLSL::getAttribLocation(pid, name.c_str(), isVerbose());
 }
 
-void Program::addUniform(const std::string &name)
+void ProgramT::addUniform(const std::string &name)
 {
 	uniforms[name] = GLSL::getUniformLocation(pid, name.c_str(), isVerbose());
 }
 
-GLint Program::getAttribute(const std::string &name) const
+GLint ProgramT::getAttribute(const std::string &name) const
 {
 	std::map<std::string, GLint>::const_iterator attribute = attributes.find(name.c_str());
 	if (attribute == attributes.end())
@@ -168,7 +165,7 @@ GLint Program::getAttribute(const std::string &name) const
 	return attribute->second;
 }
 
-GLint Program::getUniform(const std::string &name) const
+GLint ProgramT::getUniform(const std::string &name) const
 {
 	std::map<std::string, GLint>::const_iterator uniform = uniforms.find(name.c_str());
 	if (uniform == uniforms.end())

@@ -12,7 +12,7 @@
 
 std::string readFileAsString(const std::string &fileName);
 
-class Program
+class ProgramT
 {
 
 public:
@@ -21,6 +21,7 @@ public:
 	bool isVerbose() const { return verbose; }
 
     void setShaderNames(const std::string &v, const std::string &f, const std::string &tc, const std::string &te);
+    
 	virtual bool init();
 	virtual void bind();
 	virtual void unbind();
