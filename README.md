@@ -4,7 +4,8 @@ Samuel Wallan Final Project | Winter 2021 471
 Access the project webpage [here](https://swallan.github.io/471-final-proj/webpage/).
 
 
-<a href="https://ibb.co/Y7CgPp4"><img src="https://i.ibb.co/fYgJq4V/Screen-Shot-2021-03-17-at-1-27-25-PM.png" alt="Screen-Shot-2021-03-17-at-1-27-25-PM" border="0"></a>
+<a href="https://ibb.co/TtZpQf5"><img src="https://i.ibb.co/Zx3tQjC/Screen-Shot-2021-03-17-at-3-16-19-PM.png" alt="Screen-Shot-2021-03-17-at-3-16-19-PM" border="0"></a>
+
 
 Or download the project yourself and run according to the following directions:
 
