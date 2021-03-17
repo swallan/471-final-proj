@@ -6,12 +6,12 @@ uniform mat4 P;
 uniform mat4 V;
 uniform mat4 M;
 out vec3 vertex_normal;
-
+out vec3 vertex_pos;
 uniform sampler2D tex;
 
 
 uniform vec3 camoff;
-out vec3 frag_tex;
+out vec2 frag_tex;
 
 float hash(float n) { return fract(sin(n) * 753.5453123); }
 float snoise(vec3 x)
@@ -40,25 +40,7 @@ float noise(vec3 position, int octaves, float frequency, float persistence) {
     }
 
 
-//vec3 calculateNormal(vec3 p1) {
-//    float delta = 0.5f;
-//
-//    vec3 p2 = (p1 + vec3(delta, 0.0f, 0.0f)) * vec3(1.0f, 0.0f, 1.0f);
-//    vec3 p3 = (p1 + vec3(0.0f, 0.0f, -delta)) * vec3(1.0f, 0.0f, 1.0f);
-//
-//    p2.y = getHeight(p2);
-//    p3.y = getHeight(p3);
-//
-//    vec3 u = p2 - p1;
-//    vec3 v = p3 - p1;
-//
-//    vec3 normal = vec3(0.0f);
-//    normal.x = (u.y * v.z) - (u.z * v.y);
-//    normal.y = (u.z * v.x) - (u.x * v.z);
-//    normal.z = (u.x * v.y) - (u.y * v.x);
-//
-//    return normalize(normal);
-//}
+
 
 void main()
 {
@@ -98,11 +80,11 @@ void main()
 
     pos.y +=height;
 
-
-//    frag_tex = Tex;
+    vertex_pos = pos.xyz;
+    frag_tex = Tex;
     gl_Position = P * V * pos;
-    
-    vec3 texturecolor = texture(tex, pos.xz*100.0).rgb;
-    frag_tex = texturecolor;
+//
+//    vec3 texturecolor = texture(tex, pos.xy).rgb;
+//    frag_tex = texturecolor;
 
 }
