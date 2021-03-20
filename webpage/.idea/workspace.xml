@@ -20,6 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="551b62dc-8e12-4f90-895b-f9bbf46d4553" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../project_zip.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../resources/shaders/fragFB.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/shaders/fragFB.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../resources/shaders/lightBulb_frag.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/shaders/lightBulb_frag.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main.cpp" afterDir="false" />
@@ -58,7 +59,8 @@
       <workItem from="1616020724501" duration="477000" />
       <workItem from="1616049588910" duration="447000" />
       <workItem from="1616095123672" duration="104000" />
-      <workItem from="1616116253407" duration="1334000" />
+      <workItem from="1616116253407" duration="1652000" />
+      <workItem from="1616221083379" duration="862000" />
     </task>
     <servers />
   </component>
@@ -76,5 +78,11 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="561" y="269" width="670" height="676" key="search.everywhere.popup" timestamp="1616221461089">
+      <screen x="0" y="25" width="1792" height="1095" />
+    </state>
+    <state x="561" y="269" width="670" height="676" key="search.everywhere.popup/0.25.1792.1095@0.25.1792.1095" timestamp="1616221461089" />
   </component>
 </project>
