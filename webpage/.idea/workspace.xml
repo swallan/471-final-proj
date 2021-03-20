@@ -23,7 +23,6 @@
       <change beforePath="$PROJECT_DIR$/../resources/shaders/fragFB.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/shaders/fragFB.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../resources/shaders/lightBulb_frag.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/shaders/lightBulb_frag.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,7 +57,7 @@
       <workItem from="1616020724501" duration="477000" />
       <workItem from="1616049588910" duration="447000" />
       <workItem from="1616095123672" duration="104000" />
-      <workItem from="1616116253407" duration="292000" />
+      <workItem from="1616116253407" duration="605000" />
     </task>
     <servers />
   </component>
